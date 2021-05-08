@@ -1,0 +1,22 @@
+"""
+------------------------------------------------------------------------
+Scrape data from schedule me for given course code
+------------------------------------------------------------------------
+Author: Hamzah Raza
+Email:  Raza5760@mylaurier.ca
+__updated__ = "2018-07-27"
+------------------------------------------------------------------------
+"""
+
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+
+driver = webdriver.Chrome("C:/Users\hamza\Downloads\chromedriver_win32\chromedriver.exe")
+
+driver.get("https://scheduleme.wlu.ca/vsb/s/zwktuqj")
+driver.set_window_size(1920,1080)
+driver.implicitly_wait(10)
+check = driver.find_element_by_name("ignore_check")
+check.click()
+print(check)
