@@ -14,11 +14,12 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+import getpass
 
 COURSES = ["MA103", "EM203", "MA122"]
 
 for course in COURSES:
-    driver = webdriver.Chrome("C:/Users\hamza\Downloads\chromedriver_win32\chromedriver.exe")
+    driver = webdriver.Chrome("C:/Users\%s\Downloads\chromedriver_win32\chromedriver.exe" % getpass.getuser())
 
     driver.get("https://scheduleme.wlu.ca")
     driver.set_window_size(1920,1080)
