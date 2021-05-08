@@ -15,12 +15,20 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 import getpass
+import platform
 
 COURSES = ["MA103", "EM203", "MA122"]
+os = platform.system()
 
 for course in COURSES:
-    driver = webdriver.Chrome("C:/Users\%s\Downloads\chromedriver_win32\chromedriver.exe" % getpass.getuser())
+    if os == "Windows":
+        driver_path = "C:/Users\%s\Downloads\chromedriver_win32\chromedriver.exe" % getpass.getuser()
+    elif os == "Linux":
+        driver_path = "/home/%s/Downloads/chromedriver" % getpass.getuser()
+    #"darwin" is mac
 
+
+    driver = webdriver.Chrome(driver_path)
     driver.get("https://scheduleme.wlu.ca")
     driver.set_window_size(1920,1080)
     driver.implicitly_wait(10)
