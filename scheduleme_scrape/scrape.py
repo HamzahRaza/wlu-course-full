@@ -14,11 +14,21 @@ from selenium.webdriver.chrome.options import Options
 import getpass
 import platform
 
+class Course:
+    def __init__(self, code, full, waitlist):
+        self.code = code
+        self.full = full
+        self.waitlist = waitlist
+
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 
-COURSES = ["MA103", "EM203", "MA122", "BF199"]
+MA103 = Course("MA103", False, False)
+EM203 = Course("EM203", False, False)
+MA122 = Course("MA122", False, False)
+BF199 = Course("BF199", False, False)
+COURSES = [MA103, EM203, MA122, BF199]
 os = platform.system()
 
 for course in COURSES:
@@ -31,7 +41,7 @@ for course in COURSES:
 
     driver = webdriver.Chrome(driver_path, options=options)
     driver.get("https://scheduleme.wlu.ca")
-    driver.set_window_size(1920,1080)
+    driver.set_window_size(1920,1080) #required even in headless
     driver.implicitly_wait(10)
 
     spring = driver.find_element_by_id("term_202105")
@@ -40,7 +50,7 @@ for course in COURSES:
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'code_number')))
     search = driver.find_element_by_id("code_number")
     search.clear()
-    search.send_keys(course)
+    search.send_keys(course.code)
     search.send_keys(Keys.RETURN)
     
     full_classes = driver.find_element_by_id("hide_full")
@@ -50,14 +60,15 @@ for course in COURSES:
     waitlistable_classes.click()
     
     no_results_full = driver.find_element_by_id("no_results_message_div")
-    class_full = no_results_full.is_displayed()
+    course.full = no_results_full.is_displayed()
     
-    print("{} is {}".format(course, "full" if class_full else "not full"), end ="")
+    print("{} is {}".format(course.code, "full" if course.full else "not full"), end ="")
 
     waitlistable_classes.click()
     no_results_waitlist = driver.find_element_by_id("no_results_message_div")
+    course.waitlist = not no_results_waitlist.is_displayed()
 
-    if class_full and not no_results_waitlist.is_displayed():
+    if course.full and course.waitlist:
         print(", but space on the waitlist is available")
     else:
         print()
