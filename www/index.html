@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
+
   <head>
     <meta charset="utf-8">
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+    <script src="js/main.js" async></script>
     <title>WLU Course Full</title>
-  </head>
-  <body>
-    <form class="" action="" method="post">
-      <input type="text" name="course" placeholder="EM203">
-      <br><br>
-      <input type="text" name="email" placeholder="youremail@mylaurier.ca">
-      <br>
-      <button type="submit" href="/">Submit</button>
 
-    </form>
+  </head>
+
+  <body>
+      <label for="course">Course:</label>
+      <input type="text" name="course" id="course" placeholder="MA122">
+      <br>
+      <label for="term">Term:</label>
+      <input readonly type="text" name="term" id="term" value="SPRING2021">
+      <br>
+      <label>Email:</label>
+      <input type="text" name="email" id="email" placeholder="youremail@mylaurier.ca">
+      <br>
+      <button  onclick="createItem();">Submit</button>
+      <br>
+
+    <textarea readonly id= "textarea" ></textarea>
+
   </body>
 </html>
