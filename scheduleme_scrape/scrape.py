@@ -2,10 +2,6 @@
 ------------------------------------------------------------------------
 Scrape data from schedule me for given course code
 ------------------------------------------------------------------------
-Author: Hamzah Raza
-Email:  Raza5760@mylaurier.ca
-__updated__ = "2018-07-27"
-------------------------------------------------------------------------
 """
 
 
@@ -14,8 +10,13 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.chrome.options import Options
 import getpass
 import platform
+
+options = Options()
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')
 
 COURSES = ["MA103", "EM203", "MA122"]
 os = platform.system()
@@ -28,7 +29,7 @@ for course in COURSES:
     #"darwin" is mac
 
 
-    driver = webdriver.Chrome(driver_path)
+    driver = webdriver.Chrome(driver_path, options=options)
     driver.get("https://scheduleme.wlu.ca")
     driver.set_window_size(1920,1080)
     driver.implicitly_wait(10)
