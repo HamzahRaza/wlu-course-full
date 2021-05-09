@@ -14,6 +14,10 @@ from selenium.webdriver.chrome.options import Options
 import getpass
 import platform
 
+class Student:
+    def __init__(self, courses):
+        self.courses = courses
+
 class Course:
     def __init__(self, code, full, waitlist):
         self.code = code
@@ -28,10 +32,12 @@ MA103 = Course("MA103", False, False)
 EM203 = Course("EM203", False, False)
 MA122 = Course("MA122", False, False)
 BF199 = Course("BF199", False, False)
-COURSES = [MA103, EM203, MA122, BF199]
+
+test0000 = Student([MA103, EM203, MA122, BF199]) #test student
+
 os = platform.system()
 
-for course in COURSES:
+for course in test0000.courses:
     if os == "Windows":
         driver_path = "C:/Users\%s\Downloads\chromedriver_win32\chromedriver.exe" % getpass.getuser()
     elif os == "Linux":
