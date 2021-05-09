@@ -18,7 +18,7 @@ options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 
-COURSES = ["MA103", "EM203", "MA122"]
+COURSES = ["MA103", "EM203", "MA122", "BF199"]
 os = platform.system()
 
 for course in COURSES:
@@ -45,11 +45,24 @@ for course in COURSES:
     
     full_classes = driver.find_element_by_id("hide_full")
     full_classes.click()
+
+    waitlistable_classes = driver.find_element_by_id("hide_waitlistable")
+    waitlistable_classes.click()
     
-    no_results = driver.find_element_by_id("no_results_message_div")
+    no_results_full = driver.find_element_by_id("no_results_message_div")
+    class_full = no_results_full.is_displayed()
     
-    print("{} is {}".format(course, "full" if no_results.is_displayed() else "not full"))
-    
+    print("{} is {}".format(course, "full" if class_full else "not full"), end ="")
+
+    waitlistable_classes.click()
+    no_results_waitlist = driver.find_element_by_id("no_results_message_div")
+
+    if class_full and not no_results_waitlist.is_displayed():
+        print(", but space on the waitlist is available")
+    else:
+        print()
+
+
     driver.close()
     driver.quit()
     
