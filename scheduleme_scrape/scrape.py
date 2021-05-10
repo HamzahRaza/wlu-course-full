@@ -33,10 +33,11 @@ MA103 = Course("MA103", False, False)
 EM203 = Course("EM203", False, False)
 MA122 = Course("MA122", False, False)
 BF199 = Course("BF199", False, False)
-COURSES = [MA103, EM203, MA122, BF199]
+BU111 = Course("BU111", False, False)
+COURSES = [MA103, EM203, MA122, BF199, BU111]
 
-test0000 = Student(COURSES, "test0000@mylaurier.ca") #test student
-test0001 = Student(COURSES, "test0001@mylaurier.ca")
+test0000 = Student([MA103, EM203, MA122, BF199], "test0000@mylaurier.ca") #test student
+test0001 = Student([MA103, BF199, BU111], "test0001@mylaurier.ca")
 STUDENTS = [test0000, test0001]
 os = platform.system()
 
