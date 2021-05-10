@@ -15,8 +15,9 @@ import getpass
 import platform
 
 class Student:
-    def __init__(self, courses):
+    def __init__(self, courses, email):
         self.courses = courses
+        self.email = email
 
 class Course:
     def __init__(self, code, full, waitlist):
@@ -32,12 +33,14 @@ MA103 = Course("MA103", False, False)
 EM203 = Course("EM203", False, False)
 MA122 = Course("MA122", False, False)
 BF199 = Course("BF199", False, False)
+COURSES = [MA103, EM203, MA122, BF199]
 
-test0000 = Student([MA103, EM203, MA122, BF199]) #test student
-
+test0000 = Student(COURSES, "test0000@mylaurier.ca") #test student
+test0001 = Student(COURSES, "test0001@mylaurier.ca")
+STUDENTS = [test0000, test0001]
 os = platform.system()
 
-for course in test0000.courses:
+for course in COURSES:
     if os == "Windows":
         driver_path = "C:/Users\%s\Downloads\chromedriver_win32\chromedriver.exe" % getpass.getuser()
     elif os == "Linux":
@@ -68,21 +71,24 @@ for course in test0000.courses:
     no_results_full = driver.find_element_by_id("no_results_message_div")
     course.full = no_results_full.is_displayed()
     
-    print("{} is {}".format(course.code, "full" if course.full else "not full"), end ="")
 
     waitlistable_classes.click()
     no_results_waitlist = driver.find_element_by_id("no_results_message_div")
     course.waitlist = not no_results_waitlist.is_displayed()
 
-    if course.full and course.waitlist:
-        print(", but space on the waitlist is available")
-    else:
-        print()
-
-
     driver.close()
     driver.quit()
     
+for student in STUDENTS:
+    print("Student: %s" % student.email);
+    for course in student.courses:
+        print("{} is {}".format(course.code, "full" if course.full else "not full"), end ="")
+        if course.full and course.waitlist:
+            print(", but space on the waitlist is available")
+        else:
+            print()
+    print()
+
 
 # time.sleep(1)
 driver.quit()
