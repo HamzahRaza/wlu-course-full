@@ -105,10 +105,12 @@ for course in COURSES_NEW:
     driver.quit()
 
 if len(COURSES_OLD) > len(COURSES_NEW):
+    #A course has been removed, so we make sure these courses are also removed from the old saved states
     diff = np.setdiff1d(COURSES_OLD, COURSES_NEW)
     for x in diff:
         COURSES_OLD.remove(x)
 if len(COURSES_OLD) < len(COURSES_NEW):
+    #A course has been added, so we add these courses to the old saved states
     diff = np.setdiff1d(COURSES_NEW, COURSES_OLD)
     COURSES_OLD = [*COURSES_OLD, *diff]
     COURSES_OLD.sort(key=lambda x: x.code, reverse=False)
