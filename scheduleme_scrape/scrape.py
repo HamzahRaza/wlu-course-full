@@ -80,8 +80,6 @@ for course in COURSES_NEW:
     
     driver.close()
     driver.quit()
-COURSES_NEW[0].full = True
-COURSES_NEW[0].waitlist = True
 
 if len(COURSES_OLD) == len(COURSES_NEW): #assumes ordering remains the same
     for x in range(len(COURSES_OLD)):
