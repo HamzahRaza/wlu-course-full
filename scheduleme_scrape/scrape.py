@@ -80,13 +80,18 @@ for course in COURSES_NEW:
     
     driver.close()
     driver.quit()
+COURSES_NEW[0].full = True
+COURSES_NEW[0].waitlist = True
 
 if len(COURSES_OLD) == len(COURSES_NEW): #assumes ordering remains the same
     for x in range(len(COURSES_OLD)):
         if COURSES_OLD[x].full != COURSES_NEW[x].full and COURSES_NEW[x].full == False:
+            #course went from full to not full
             for student in COURSES_NEW[x].students:
                 print("%s: Space opened up in course %s" % (student.email, COURSES_NEW[x].code))
-        if COURSES_OLD[x].waitlist != COURSES_NEW[x].waitlist and COURSES_NEW[x].waitlist == True: #waitlist = true implies full = true
+        elif COURSES_OLD[x].waitlist != COURSES_NEW[x].waitlist and COURSES_NEW[x].waitlist == True and COURSES_OLD[x].full == COURSES_OLD[x].full:
+            #waitlist went from closed to open, and course did not just become full
+            #full course just had an opening on the waiting list
             for student in COURSES_NEW[x].students:
                 print("%s: Space opened up on waiting list for course %s" % (student.email, COURSES_NEW[x].code))
 
