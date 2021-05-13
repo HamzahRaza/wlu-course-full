@@ -26,6 +26,31 @@ class Course:
         self.waitlist = waitlist
         self.students = students
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.code == other.code
+        return False
+    def __gt__(self, other):
+        if isinstance(other, self.__class__):
+            return max(self.code.upper(), other.code.upper()) == self.code
+        return False
+    def __ge__(self, other):
+        if isinstance(other, self.__class__):
+            return self.code == other.code or max(self.code.upper(), other.code.upper()) == self.code
+        return False
+    def __lt__(self, other):
+        if isinstance(other, self.__class__):
+            return min(self.code.upper(), other.code.upper()) == self.code
+        return False
+    def __le__(self, other):
+        if isinstance(other, self.__class__):
+            return self.code == other.code or min(self.code.upper(), other.code.upper()) == self.code
+        return False
+    def __ne__(self, other):
+        if isinstance(other, self.__class__):
+            return not self.code == other.code
+        return False
+
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
@@ -38,7 +63,9 @@ EM203 = Course("EM203", False, False, [test0000])
 BF199 = Course("BF199", False, False, [test0000, test0001])
 BU111 = Course("BU111", False, False, [test0001])
 CS202 = Course("CS202", False, False, [test0001])
-COURSES_NEW = [MA103, EM203, BF199, BU111, CS202]
+CP164 = Course("CP164", False, False, [test0000])
+COURSES_NEW = [MA103, BF199, BU111, CS202]
+COURSES_NEW.sort(key=lambda x: x.code, reverse=False)
 
 STUDENTS = [test0000, test0001]
 os = platform.system()
@@ -81,16 +108,31 @@ for course in COURSES_NEW:
     driver.close()
     driver.quit()
 
-if len(COURSES_OLD) == len(COURSES_NEW): #assumes ordering remains the same
-    for x in range(len(COURSES_OLD)):
-        if COURSES_OLD[x].full != COURSES_NEW[x].full and COURSES_NEW[x].full == False:
-            #course went from full to not full
-            for student in COURSES_NEW[x].students:
-                print("%s: Space opened up in course %s" % (student.email, COURSES_NEW[x].code))
-        elif COURSES_OLD[x].waitlist != COURSES_NEW[x].waitlist and COURSES_NEW[x].waitlist == True and COURSES_OLD[x].full == COURSES_OLD[x].full:
-            #waitlist went from closed to open, and course did not just become full
-            #full course just had an opening on the waiting list
-            for student in COURSES_NEW[x].students:
-                print("%s: Space opened up on waiting list for course %s" % (student.email, COURSES_NEW[x].code))
+y = 0
+for x in range(len(COURSES_OLD)):
+    if COURSES_OLD[x] != COURSES_NEW[y]:
+        if len(COURSES_OLD) > len(COURSES_NEW):
+            #course removed, skip over COURSES_OLD entry
+            continue
+        elif len(COURSES_OLD) < len(COURSES_NEW):
+            #course(s) added, skip over COURSES_NEW entry/entries
+            while COURSES_OLD[x] != COURSES_NEW[y]:
+                y += 1
+
+    if COURSES_OLD[x].full != COURSES_NEW[y].full and COURSES_NEW[y].full == False:
+        #course went from full to not full
+        for student in COURSES_NEW[y].students:
+            print("%s: Space opened up in course %s" % (student.email, COURSES_NEW[x].code))
+    elif COURSES_OLD[x].waitlist != COURSES_NEW[y].waitlist and COURSES_NEW[y].waitlist == True and COURSES_OLD[x].full == COURSES_NEW[y].full:
+        #waitlist went from closed to open, and course did not just become full
+        #full course just had an opening on the waiting list
+        for student in COURSES_NEW[x].students:
+            print("%s: Space opened up on waiting list for course %s" % (student.email, COURSES_NEW[x].code))
+
+    y += 1
+    if y > len(COURSES_NEW) - 1:
+        #the case of the newly removed course(s) being the last element(s)
+        #the case of newly added course(s) being the last element implicitly handled by COURSES_OLD being smaller, and thus ending where the new course(s) begin
+        break
 
 pickle.dump(COURSES_NEW, open("courses", "wb")) #save courses state to "courses" file
