@@ -4,7 +4,6 @@ Scrape data from schedule me for given course code
 ------------------------------------------------------------------------
 """
 
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
@@ -15,9 +14,11 @@ import getpass
 import platform
 import pickle
 
+
 class Student:
     def __init__(self, email):
         self.email = email
+
 
 class Course:
     def __init__(self, code, full, waitlist, students):
@@ -30,109 +31,134 @@ class Course:
         if isinstance(other, self.__class__):
             return self.code == other.code
         return False
+
     def __gt__(self, other):
         if isinstance(other, self.__class__):
             return max(self.code.upper(), other.code.upper()) == self.code
         return False
+
     def __ge__(self, other):
         if isinstance(other, self.__class__):
-            return self.code == other.code or max(self.code.upper(), other.code.upper()) == self.code
+            return self.code == other.code or max(
+                self.code.upper(), other.code.upper()) == self.code
         return False
+
     def __lt__(self, other):
         if isinstance(other, self.__class__):
             return min(self.code.upper(), other.code.upper()) == self.code
         return False
+
     def __le__(self, other):
         if isinstance(other, self.__class__):
-            return self.code == other.code or min(self.code.upper(), other.code.upper()) == self.code
+            return self.code == other.code or min(
+                self.code.upper(), other.code.upper()) == self.code
         return False
+
     def __ne__(self, other):
         if isinstance(other, self.__class__):
             return not self.code == other.code
         return False
 
+
+def update():
+    test0000 = Student("test0000@mylaurier.ca")  #test student
+    test0001 = Student("test0001@mylaurier.ca")
+
+    MA103 = Course("MA103", False, False, [test0000, test0001])
+    EM203 = Course("EM203", False, False, [test0000])
+    BF199 = Course("BF199", False, False, [test0000, test0001])
+    BU111 = Course("BU111", False, False, [test0001])
+    CS202 = Course("CS202", False, False, [test0001])
+    CP164 = Course("CP164", False, False, [test0000])
+    COURSES_NEW = [MA103, BF199, BU111, CS202]
+    COURSES_NEW.sort(key=lambda x: x.code, reverse=False)
+
+    STUDENTS = [test0000, test0001]
+    return COURSES_NEW, STUDENTS
+
+
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 
-test0000 = Student("test0000@mylaurier.ca") #test student
-test0001 = Student("test0001@mylaurier.ca")
+COURSES_NEW, STUDENTS = update()
 
-MA103 = Course("MA103", False, False, [test0000, test0001])
-EM203 = Course("EM203", False, False, [test0000])
-BF199 = Course("BF199", False, False, [test0000, test0001])
-BU111 = Course("BU111", False, False, [test0001])
-CS202 = Course("CS202", False, False, [test0001])
-CP164 = Course("CP164", False, False, [test0000])
-COURSES_NEW = [MA103, BF199, BU111, CS202]
-COURSES_NEW.sort(key=lambda x: x.code, reverse=False)
-
-STUDENTS = [test0000, test0001]
 os = platform.system()
 
-COURSES_OLD = pickle.load(open("courses", "rb")) #load state from "courses" file
+COURSES_OLD = pickle.load(open("courses",
+                               "rb"))  #load state from "courses" file
 
 if os == "Windows":
-    driver_path = "C:/Users\%s\Downloads\chromedriver_win32\chromedriver.exe" % getpass.getuser()
+    driver_path = "C:/Users\%s\Downloads\chromedriver_win32\chromedriver.exe" % getpass.getuser(
+    )
 elif os == "Linux":
     driver_path = "/home/%s/Downloads/chromedriver" % getpass.getuser()
 #"darwin" is mac
 for course in COURSES_NEW:
     driver = webdriver.Chrome(driver_path, options=options)
     driver.get("https://scheduleme.wlu.ca")
-    driver.set_window_size(1920,1080) #required even in headless
+    driver.set_window_size(1920, 1080)  #required even in headless
     driver.implicitly_wait(10)
 
-    winter = driver.find_element_by_id("term_202101")
+    winter = driver.find_element_by_id("term_202109")
     winter.click()
-    
-    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'code_number')))
+
+    WebDriverWait(driver,
+                  10).until(EC.element_to_be_clickable((By.ID, 'code_number')))
     search = driver.find_element_by_id("code_number")
     search.clear()
     search.send_keys(course.code)
     search.send_keys(Keys.RETURN)
-    
+
     full_classes = driver.find_element_by_id("hide_full")
     full_classes.click()
 
     waitlistable_classes = driver.find_element_by_id("hide_waitlistable")
     waitlistable_classes.click()
-    
+
     no_results_full = driver.find_element_by_id("no_results_message_div")
     course.full = no_results_full.is_displayed()
-    
+
     waitlistable_classes.click()
     no_results_waitlist = driver.find_element_by_id("no_results_message_div")
     course.waitlist = not no_results_waitlist.is_displayed()
-    
+
     driver.close()
     driver.quit()
 
-y = 0
-for x in range(len(COURSES_OLD)):
-    if COURSES_OLD[x] != COURSES_NEW[y]:
+new_index = 0
+for old_index in range(
+        len(COURSES_OLD)):  #compare old with new, make changes if necessary
+    if COURSES_OLD[old_index] != COURSES_NEW[new_index]:
         if len(COURSES_OLD) > len(COURSES_NEW):
             #course removed, skip over COURSES_OLD entry
             continue
         elif len(COURSES_OLD) < len(COURSES_NEW):
-            #course(s) added, skip over COURSES_NEW entry/entries
-            while COURSES_OLD[x] != COURSES_NEW[y]:
-                y += 1
+            #course(s) added, skip over COURSES_NEW entry/entries that are at the beginning
+            while COURSES_OLD[old_index] != COURSES_NEW[new_index]:
+                new_index += 1
 
-    if COURSES_OLD[x].full != COURSES_NEW[y].full and COURSES_NEW[y].full == False:
+    if COURSES_OLD[old_index].full != COURSES_NEW[
+            new_index].full and COURSES_NEW[new_index].full == False:
         #course went from full to not full
-        for student in COURSES_NEW[y].students:
-            print("%s: Space opened up in course %s" % (student.email, COURSES_NEW[x].code))
-    elif COURSES_OLD[x].waitlist != COURSES_NEW[y].waitlist and COURSES_NEW[y].waitlist == True and COURSES_OLD[x].full == COURSES_NEW[y].full:
+        for student in COURSES_NEW[new_index].students:
+            print("%s: Space opened up in course %s" %
+                  (student.email, COURSES_NEW[new_index].code))
+    elif COURSES_OLD[old_index].waitlist != COURSES_NEW[
+            new_index].waitlist and COURSES_NEW[
+                new_index].waitlist == True and COURSES_OLD[
+                    old_index].full == COURSES_NEW[new_index].full:
         #waitlist went from closed to open, and course did not just become full
         #full course just had an opening on the waiting list
-        for student in COURSES_NEW[x].students:
-            print("%s: Space opened up on waiting list for course %s" % (student.email, COURSES_NEW[x].code))
+        for student in COURSES_NEW[new_index].students:
+            print("%s: Space opened up on waiting list for course %s" %
+                  (student.email, COURSES_NEW[new_index].code))
 
-    y += 1
-    if y > len(COURSES_NEW) - 1:
+    new_index += 1
+    if new_index > len(COURSES_NEW) - 1:
         #the case of the newly removed course(s) being the last element(s)
         #the case of newly added course(s) being the last element implicitly handled by COURSES_OLD being smaller, and thus ending where the new course(s) begin
         break
 
-pickle.dump(COURSES_NEW, open("courses", "wb")) #save courses state to "courses" file
+pickle.dump(COURSES_NEW, open("courses",
+                              "wb"))  #save courses state to "courses" file
