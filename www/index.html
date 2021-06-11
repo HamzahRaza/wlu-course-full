@@ -5,22 +5,22 @@
   <head>
     <meta charset="utf-8">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
-    <script src="js/main.js" async></script>
+    <script src="../js/main.js" async></script>
     <title>WLU Course Full</title>
 
   </head>
 
   <body>
       <label for="course">Course:</label>
-      <input type="text" name="course" id="course" placeholder="MA122">
+      <input type="text" name="course" id="course" placeholder="MA122" required>
       <br>
       <label for="term">Term:</label>
       <input readonly type="text" name="term" id="term" value="SPRING2021">
       <br>
       <label>Email:</label>
-      <input type="text" name="email" id="email" placeholder="youremail@mylaurier.ca">
+      <input type="email" name="email" id="email" placeholder="youremail@mylaurier.ca" required>
       <br>
-      <button  onclick="createItem();">Submit</button>
+      <button onclick="validateInputs()">Submit</button>
       <br>
 
     <textarea readonly id= "textarea" ></textarea>
