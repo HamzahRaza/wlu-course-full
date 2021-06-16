@@ -13,11 +13,16 @@ from selenium.webdriver.chrome.options import Options
 import getpass
 import platform
 import pickle
+import boto3
+import pandas as pd
 
 
 class Student:
     def __init__(self, email):
         self.email = email
+    
+    def __str__(self):
+        return "{}".format(self.email)
 
 
 class Course:
@@ -59,29 +64,40 @@ class Course:
             return not self.code == other.code
         return False
 
+    def __str__(self):
+        return "code: {}, full: {}, waitlist: {}, students: {}".format(self.code, self.full, self.waitlist, self.students)
+
+def aws_scan():
+    db = boto3.resource('dynamodb', region_name="us-east-1")
+    table = db.Table('wlu-course-full').scan()
+    df = pd.DataFrame.from_dict(table["Items"])
+    df['course'] = df['course'].str.lower()
+    gdf = df.groupby(['course', 'term'])['email'].apply(",".join).reset_index()
+    return gdf
 
 def update():
-    test0000 = Student("test0000@mylaurier.ca")  #test student
-    test0001 = Student("test0001@mylaurier.ca")
+    df = aws_scan()
+    COURSES_NEW = []
 
-    MA103 = Course("MA103", False, False, [test0000, test0001])
-    EM203 = Course("EM203", False, False, [test0000])
-    BF199 = Course("BF199", False, False, [test0000, test0001])
-    BU111 = Course("BU111", False, False, [test0001])
-    CS202 = Course("CS202", False, False, [test0001])
-    CP164 = Course("CP164", False, False, [test0000])
-    COURSES_NEW = [MA103, BF199, BU111, CS202]
+    for i in df.index:
+        studentsList = df['email'][i].split(",") #list of students emails for course i
+        students  = [] #list of student objects
+        for student in studentsList:
+            students.append(Student(student))
+        COURSES_NEW.append(Course(df['course'][i], False, False, students))
+        
     COURSES_NEW.sort(key=lambda x: x.code, reverse=False)
-
-    STUDENTS = [test0000, test0001]
-    return COURSES_NEW, STUDENTS
+    
+    # STUDENTS = [test0000, test0001]
+    return COURSES_NEW#, STUDENTS
 
 
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
 
-COURSES_NEW, STUDENTS = update()
+# COURSES_NEW, STUDENTS = update()
+COURSES_NEW = update()
 
 os = platform.system()
 
