@@ -116,7 +116,7 @@ for course in COURSES_NEW:
     driver.set_window_size(1920, 1080)  #required even in headless
     driver.implicitly_wait(10)
 
-    winter = driver.find_element_by_id("term_202109")
+    winter = driver.find_element_by_id("term_202201")
     winter.click()
 
     WebDriverWait(driver,
