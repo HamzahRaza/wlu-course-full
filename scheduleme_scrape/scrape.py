@@ -75,7 +75,7 @@ def aws_scan():
     gdf = df.groupby(['course', 'term'])['email'].apply(",".join).reset_index()
     return gdf
 
-def update():
+def update(): #to pull new data from aws and fill up COURSES_NEW array with course objects based on new data
     df = aws_scan()
     COURSES_NEW = []
 
@@ -91,7 +91,7 @@ def update():
     # STUDENTS = [test0000, test0001]
     return COURSES_NEW#, STUDENTS
 
-
+#selenium options
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--disable-gpu')
@@ -128,12 +128,13 @@ for course in COURSES_NEW:
 
     full_classes = driver.find_element_by_id("hide_full")
     full_classes.click()
+    #If the course is full, will be hidden at this point
 
     waitlistable_classes = driver.find_element_by_id("hide_waitlistable")
     waitlistable_classes.click()
 
     no_results_full = driver.find_element_by_id("no_results_message_div")
-    course.full = no_results_full.is_displayed()
+    course.full = no_results_full.is_displayed() #if no results message is displayed, the course is full
 
     waitlistable_classes.click()
     no_results_waitlist = driver.find_element_by_id("no_results_message_div")
@@ -150,7 +151,7 @@ for old_index in range(
             #course removed, skip over COURSES_OLD entry
             continue
         elif len(COURSES_OLD) < len(COURSES_NEW):
-            #course(s) added, skip over COURSES_NEW entry/entries that are at the beginning
+            #course(s) added, skip over COURSES_NEW entry/entries
             while COURSES_OLD[old_index] != COURSES_NEW[new_index]:
                 new_index += 1
 
