@@ -1,0 +1,24 @@
+header {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 500;
+    font-size: 60px;
+    background-color: #ffffff;
+    padding: 20px;
+    color: black;
+   }
+
+body {
+    background-image: url("Laurier");
+    background-color: #cccccc;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
+    font-size: 35px;
+    background-color: #dacbeb;
+   }
+   
