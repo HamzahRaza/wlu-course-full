@@ -50,6 +50,4 @@ function validateCourse() {
 function validateInputs() {
   validateEmail() && validateCourse() ? createItem(): document.getElementById('textarea').innerHTML = "try again";
   return
-
-
 }
