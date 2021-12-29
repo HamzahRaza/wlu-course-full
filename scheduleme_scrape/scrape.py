@@ -109,6 +109,8 @@ if os == "Windows":
     )
 elif os == "Linux":
     driver_path = "/home/%s/Downloads/chromedriver" % getpass.getuser()
+elif os == "Darwin":
+    driver_path = "/Users/%s/downloads" % getpass.getuser()
 #"darwin" is mac
 for course in COURSES_NEW:
     driver = webdriver.Chrome(driver_path, options=options)
