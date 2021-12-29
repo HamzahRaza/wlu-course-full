@@ -4,39 +4,44 @@
 
   <head>
     <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Play&display=swap" rel="stylesheet">
     <link rel = "stylesheet" href= "style.css"/>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
     <script src="js/main.js" async></script>
     <title>WLU Course Full</title>
-    <header>WLU Course Full</header>
+   
   </head>
+  <div class = "entry">
+    <h1>WLU Course Full</h1>
+    <label for="course">Course</label>
+    <br>
+    <input type="text" name="course" id="course" placeholder="MA122">
+    <br>
+    <label for="Term">Term</label>
+    <br>
+    <select name="Term" id="term">
+      <optgroup label="2021">
+        <option value="fall">Fall</option>
+      </optgroup>
+      <optgroup label="2022">
+        <option value="winter">Winter</option>
+        <option value="spring">Spring</option>
+        <option value="spring">Fall</option>
+      </optgroup>
+    </select>
+    <br>
+    <label>Email</label>
+    <br>
+    <input type="text" name="email" id="email" placeholder="youremail@mylaurier.ca">
+    <br>
+  
+    <button  onclick="createItem();">Submit</button>
+    <br>
 
+  </div>
   <body>
-      <label for="course">Course</label>
-      <br>
-      <input type="text" name="course" id="course" placeholder="MA122">
-      <br>
-      <label for="Term">Term</label>
-      <br>
-      <select name="Term" id="term">
-        <optgroup label="2021">
-          <option value="fall">Fall</option>
-        </optgroup>
-        <optgroup label="2022">
-          <option value="winter">Winter</option>
-          <option value="spring">Spring</option>
-          <option value="spring">Fall</option>
-        </optgroup>
-      </select>
-      <br>
-      <label>Email</label>
-      <br>
-      <input type="text" name="email" id="email" placeholder="youremail@mylaurier.ca">
-      <br>
-      <button  onclick="createItem();">Submit</button>
-      <br>
-
-    <textarea readonly id= "textarea" ></textarea>
 
   </body>
 </html>
