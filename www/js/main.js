@@ -21,7 +21,7 @@ function createItem() {
             document.getElementById('textarea').innerHTML = "Error: Unable to add item" ;
             document.getElementById('errormessage').innerHTML = JSON.stringify(err, undefined, 2);
         } else {
-            document.getElementById('textarea').innerHTML = "submitted";
+            document.getElementById('textarea').innerHTML = "Submitted!";
 
         }
     });
