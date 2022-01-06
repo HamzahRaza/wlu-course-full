@@ -7,42 +7,72 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"> 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
     <link href="https://fonts.googleapis.com/css2?family=Play&display=swap" rel="stylesheet">
-    <link rel = "stylesheet" href= "style.css"/>
+    <link rel = "stylesheet" href= "source/style.css"/>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
     <script src="js/main.js" async></script>
     <title>WLU Course Full</title>
    
   </head>
-  <div class = "entry">
-    <img src="gold leaves.png" alt="Girl in a jacket" width="180" height="128">
-    <h1>WLU Course Full</h1>
-    <label for="course">Course</label>
-    <br>
-    <input type="text" name="course" id="course" placeholder="MA122">
-    <br>
-    <label for="Term">Term</label>
-    <br>
-    <select name="Term" id="term">
-      <optgroup label="2021">
-        <option value="fall">Fall</option>
-      </optgroup>
-      <optgroup label="2022">
-        <option value="winter">Winter</option>
-        <option value="spring">Spring</option>
-        <option value="spring">Fall</option>
-      </optgroup>
-    </select>
-    <br>
-    <label>Email</label>
-    <br>
-    <input type="text" name="email" id="email" placeholder="youremail@mylaurier.ca">
-    <br>
-  
-    <button  onclick="createItem();">Submit</button>
-    <br>
 
-  </div>
-  <body>
+<body>
+  
+  <header style="color: white;">
+    <div class="header">
+    WLU Course Full
+    </div>
+    <div class="nav">
+      
+    </div>
+    
+  </header>
+
+
+  <section class="front">
+
+    <div class = "panel">
+      <div class="image-container">
+        <img src="source/gold-leaves.png" alt="Girl in a jacket" width="180" height="128">
+      </div>
+      <div class="entry">
+        <label for="course">Course</label>
+        <br>
+        <input type="text" class="w3-input w3-hover-grey" name="course" id="course" placeholder="MA122">
+      </div>
+
+      <div class="entry">
+        <label for="Term">Term</label>
+        <br>
+        <select class="w3-select w3-border" name="Term" id="term">
+          <optgroup label="2021">
+            <option value="fall">Fall</option>
+          </optgroup>
+          <optgroup label="2022">
+            <option value="winter">Winter</option>
+            <option value="spring">Spring</option>
+            <option value="spring">Fall</option>
+          </optgroup>
+        </select>
+
+      </div>
+      <div class="entry">
+        <label>Email</label>
+        <br>
+        <input type="text" class="w3-input w3-hover-grey" name="email" id="email" placeholder="youremail@mylaurier.ca">
+      </div>
+      
+      <div class="button">
+        <button  onclick="createItem();">Notify Me!</button>
+      </div>
+
+    </div>
+
+    <footer>
+
+      hello
+      
+    </footer>
+
 
   </body>
 </html>
