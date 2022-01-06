@@ -12,15 +12,20 @@ function createItem() {
             "term": document.getElementById('term').value,
             "email": document.getElementById('email').value,
             "time": Date.now().toString(),
+
+
         }
     };
     docClient.put(params, function(err, data) {
         if (err) {
-            document.getElementById('textarea').innerHTML = "Unable to add item: " + "\n" + JSON.stringify(err, undefined, 2);
+            document.getElementById('textarea').innerHTML = "Error: Unable to add item" ;
+            document.getElementById('errormessage').innerHTML = JSON.stringify(err, undefined, 2);
         } else {
             document.getElementById('textarea').innerHTML = "submitted";
+
         }
     });
+
 }
 
 function validateEmail() {
